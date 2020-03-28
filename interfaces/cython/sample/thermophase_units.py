@@ -1,21 +1,15 @@
-import cantera
-from . import utilities
-
+import cantera as ct
 from pint import UnitRegistry
-
 ureg = UnitRegistry()
+Q_ = ureg.Quantity
 
-Q = ureg.Quantity
-
-class ThermoPhaseUnits:
-    def __init__(self, *args, **kwargs):
-        self.thermo = ThermoPhase(*args, **kwargs)
+class ThermoPhaseUnits(ct.ThermoPhase):
     @property
-    def setState_TP():
-        T,P = self.thermo.setState_TP
-        return Q(T,"K"),Q(P,"Pa")
-    @setState_TP.setter
-    def setState_TP_units(self, T, P):
+    def TP(self):
+        T, P = self.thermo.TP
+        return Q_(T, "K"), Q_(P, "Pa")
+    @TP.setter
+    def TP(self, T, P):
         if T is not None:
             T = T.to("K").magnitude 
         else:
